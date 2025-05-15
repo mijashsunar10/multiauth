@@ -6,6 +6,8 @@
         <flux:separator variant="subtle" />
     </div>
 
+    {{-- Flux is a UI component library designed specifically for Laravel Livewire applications. It offers a collection of pre-built, customizable components that streamline the development of interactive user interfaces --}}
+
         <p>Hello, World</p>
     </div>
 </x-layouts.app>

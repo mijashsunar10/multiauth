@@ -45,6 +45,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
             return redirect()->route('admin.dashboard')->with("success","log in sucessfull");
         }
 
+        //         If the user is logged in, you get the User model instance. Then $user->role will return an enum instance, not just a string
+        // === UserRole::Admin
+        // his compares the user’s role with the enum value UserRole::Admin.
+        // This is a strict comparison, meaning both:
+        // The value must be 'admin'
+        // The type must match the enum type 
+
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 

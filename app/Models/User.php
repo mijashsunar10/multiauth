@@ -54,6 +54,9 @@ class User extends Authenticatable
             'role' => UserRole::class
         ];
     }
+//     Casting in Laravel is a powerful feature that allows you to automatically convert attributes on your Eloquent models to common data types (like integers, booleans, dates, arrays, objects) or even custom types like enums when you retrieve or set them.
+// It automatically binds with the enum data type
+
 
     /**
      * Get the user's initials
