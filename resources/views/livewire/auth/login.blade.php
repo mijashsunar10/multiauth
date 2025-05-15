@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
-// use App\Enums\UserRole;
+use App\Enums\UserRole;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|string|email')]
