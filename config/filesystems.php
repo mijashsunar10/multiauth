@@ -40,7 +40,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // 'root' => storage_path('app/public'),//the publix will store evertyhing photos int the storage system i dont want that i want to store in public folde
+            'root' =>public_path(),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,

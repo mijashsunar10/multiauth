@@ -11,6 +11,7 @@
                 <x-app-logo />
             </a>
 
+                    @auth
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item
@@ -23,6 +24,8 @@
                     </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
+        @endauth
+
 
 
             <flux:spacer />
@@ -39,11 +42,13 @@
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
-                <flux:profile
+               <flux:profile
                     :name="auth()->user()->name"
-                    :initials="auth()->user()->initials()"
+                    :avatar="auth()->user()->photo ?? null"
+                    :initials="auth()->user()->photo ? null : auth()->user()->initials()"
                     icon-trailing="chevrons-up-down"
                 />
+
 
                 <flux:menu class="w-[220px]">
                     <flux:menu.radio.group>
