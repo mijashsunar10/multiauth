@@ -13,8 +13,8 @@ use Livewire\Volt\Component;
 use App\Enums\UserRole;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    #[Validate('required|string')]
+    public string $email_or_username = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -30,12 +30,33 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        $login_name = filter_var($this->email_or_username, FILTER_VALIDATE_EMAIL) ? "email" : "username" ;
+        // filter_var() is a built-in PHP function used to validate and sanitize data.
+        // filter_var($variable, $filter);
+        // $variable: The value you want to check.
+        // $filter: The filter you want to apply, like FILTER_VALIDATE_EMAIL, 
+        // in my case it check if it is a valod email address or not if it is a valid email address it will return email otherwise it will return username
+
+
+       if (! Auth::attempt([$login_name => $this->email_or_username, 'password' => $this->password], $this->remember))
+    //    $this->remember is a boolean.If it's true, Laravel will "remember" the user 
+        {
             RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+            // RateLimiter::hit(...) increases the count of failed attempts for the current user/IP to prevent brute-force attacks.
+            // $this->throttleKey()=It generates a unique key (string) to track login attempts for rate limiting (to prevent brute-force attacks).
+
+            throw ValidationException::withMessages([ 
+
+                //  stops the login process and shows a custom error message under the email_or_username input field.
+
+                'email_or_username' => __('auth.failed'),
+                
+                // __('auth.failed') comes from Laravel’s translation files and usually says: "These credentials do not match our records."
+
+
             ]);
+
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -69,7 +90,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
+            'email_or_username' => __('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -81,7 +102,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email_or_username).'|'.request()->ip());
     }
 }; ?>
 
@@ -94,13 +115,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <form wire:submit="login" class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
+            wire:model="email_or_username"
+            :label="__('Email/Username')"
+            type="text"
             required
             autofocus
-            autocomplete="email"
-            placeholder="email@example.com"
+            placeholder="email@example.com/username"
         />
 
         <!-- Password -->

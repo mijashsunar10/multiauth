@@ -13,6 +13,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     use WithFileUploads;
     public string $name = '';
     public string $email = '';
+    public string $username = '';
     public string $password = '';
     public string $password_confirmation = '';
     public $photo;
@@ -25,6 +26,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'photo' => ['image','nullable'],
+            'username' => ['required', 'unique:' . User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -73,6 +75,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
             placeholder="email@example.com"
         />
 
+        <flux:input 
+            wire:model="username"
+            :label="__('Username')"
+            type="text"
+            required 
+            placeholder="Username"
+        />
+
          <flux:input
             wire:model="photo"
             id="photo"
@@ -107,6 +117,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             :placeholder="__('Confirm password')"
             viewable
         />
+
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
