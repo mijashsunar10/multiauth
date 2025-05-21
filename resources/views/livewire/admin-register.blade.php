@@ -23,7 +23,7 @@
                 <div class="space-y-1">
                     <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
                     <input id="name" name="name" type="text" wire:model="name" required
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                        class="appearance-none block w-full px-3 py-2 border text-black  border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
                         placeholder="John Doe">
                     @error('name')
                         <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -35,10 +35,26 @@
                     @enderror
                 </div>
 
+                        <div class="space-y-1">
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input id="username" name="username" type="text" wire:model="username" required
+                class="appearance-none block w-full text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                placeholder="Enter your username">
+            @error('username')
+                <p class="mt-1 text-sm text-red-600 flex items-center">
+                    <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+
                 <div class="space-y-1">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
                     <input id="email" name="email" type="email" wire:model="email" required
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                        class="appearance-none block w-full text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
                         placeholder="admin@example.com">
                     @error('email')
                         <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -54,7 +70,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" wire:model="password" required
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                            class="appearance-none block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
                             placeholder="••••••••">
                         <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                             x-data="{ show: false }" 
@@ -82,7 +98,7 @@
                 <div class="space-y-1">
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <input id="password_confirmation" name="password_confirmation" type="password" wire:model="password_confirmation" required
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                        class="appearance-none block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
                         placeholder="••••••••">
                 </div>
 
@@ -103,7 +119,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('passwordToggle', () => ({
             show: false,
-            toggle() {
+            toggle() {asfdasdfas
                 this.show = !this.show;
                 const passwordField = this.$refs.password;
                 passwordField.type = this.show ? 'text' : 'password';

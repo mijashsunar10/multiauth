@@ -14,7 +14,7 @@ use Livewire\Component;
 
 class AdminRegister extends Component
 {
-    public $name, $email, $password, $password_confirmation;
+    public $name, $email, $password, $password_confirmation, $username;
 
     public function register()
     {
@@ -22,13 +22,17 @@ class AdminRegister extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
+            'username' => 'required|unique:users|max:255',
             'password' => 'required|min:8|confirmed',
+
         ]);
 
         // Create admin user
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
+            'username' => $this->username,
+
             'password' => Hash::make($this->password),
             'role' => 'admin',
         ]);
@@ -40,7 +44,7 @@ class AdminRegister extends Component
         // return redirect('/admin/dashboard')->with('success', 'Admin registered successfully!');
 
         // Clear form
-        $this->reset(['name', 'email', 'password', 'password_confirmation']);
+        $this->reset(['name', 'email', 'password', 'username', 'password_confirmation']);
 
         // Show success message and stay on same page
         return redirect()->route('admin.dashboard')->with('success', 'New admin registered successfully!');
