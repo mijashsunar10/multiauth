@@ -42,3 +42,9 @@ This is a strict comparison, meaning both:
 The value must be 'admin'
 The type must match the enum type 
  
+
+
+
+Started for language
+
+php artisan lang:publish
