@@ -25,7 +25,8 @@ class User extends Authenticatable
         'password',
         'role', // Add this
         'photo',
-        'username'
+        'username',
+        'suspended_at'
     ];
 
     //     public function isAdmin(): bool
@@ -69,6 +70,25 @@ class User extends Authenticatable
             ->explode(' ')
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    public function suspend()
+    {
+        $this->suspended_at = now();
+        $this->save();
+    }
+
+    public function isSuspended()
+    {
+        return $this->suspended_at ? true : false ;
+
+    }
+
+    public function unsuspended()
+    {
+        $this->suspended_at = NULL;
+        $this->save();
+        
     }
 
 

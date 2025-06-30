@@ -3,6 +3,7 @@
 
 
 use App\Livewire\AdminRegister;
+use App\Livewire\UserList;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -30,7 +31,10 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
+    Route::get('users',UserList::class)->middleware('admin')->name('users.index');
 });
+
 
 
 

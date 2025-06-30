@@ -1,67 +1,75 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-    <head>
-        @include('partials.head')
-    </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
+<head>
+    @include('partials.head')
+</head>
+<body class="min-h-screen bg-white dark:bg-zinc-800">
 
-            <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <x-app-logo />
-            </a>
+    <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-                    @auth
-            <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
+        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse">
+            <x-app-logo />
+        </a>
+
+        <flux:navlist variant="outline">
+            <flux:navlist.group :heading="__('Platform')" class="grid">
+
+                @auth
                     <flux:navlist.item
                         icon="home"
-                        :href="auth()->user()->role === \App\Enums\UserRole::Admin ? route('admin.dashboard') : route('dashboard')"
+                        href="{{ auth()->user()->role === \App\Enums\UserRole::Admin ? route('admin.dashboard') : route('dashboard') }}"
                         :current="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard')"
-                        wire:navigate
                     >
                         {{ __('Dashboard') }}
                     </flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
-        @endauth
 
+                    @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="list-bullet"
+                            href="{{ route('users.index') }}"
+                            :current="request()->routeIs('users.index')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse"
+                        >
+                            {{ __('User List') }}
+                        </flux:navlist.item>
+                    @endif
+                @endauth
 
+            </flux:navlist.group>
+        </flux:navlist>
 
-            <flux:spacer />
+        <flux:spacer />
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
+        <flux:navlist variant="outline">
+            <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
-                </flux:navlist.item>
+            </flux:navlist.item>
 
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
+            <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                 {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
+            </flux:navlist.item>
+        </flux:navlist>
 
-            <!-- Desktop User Menu -->
+        {{-- Desktop User Dropdown --}}
+        @auth
             <flux:dropdown position="bottom" align="start">
-               <flux:profile
+                <flux:profile
                     :name="auth()->user()->name"
                     :avatar="auth()->user()->photo ?? null"
                     :initials="auth()->user()->photo ? null : auth()->user()->initials()"
                     icon-trailing="chevrons-up-down"
                 />
 
-
                 <flux:menu class="w-[220px]">
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
+                                    <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                         {{ auth()->user()->initials() }}
                                     </span>
                                 </span>
-
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -73,7 +81,9 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item href="{{ route('settings.profile') }}" icon="cog">
+                            {{ __('Settings') }}
+                        </flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -86,32 +96,27 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
-        </flux:sidebar>
+        @endauth
+    </flux:sidebar>
 
-        <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+    {{-- Mobile User Menu --}}
+    <flux:header class="lg:hidden">
+        <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+        <flux:spacer />
 
-            <flux:spacer />
-
+        @auth
             <flux:dropdown position="top" align="end">
-                <flux:profile
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevron-down"
-                />
+                <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
 
                 <flux:menu>
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
+                                    <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                         {{ auth()->user()->initials() }}
                                     </span>
                                 </span>
-
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -123,7 +128,9 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item href="{{ route('settings.profile') }}" icon="cog">
+                            {{ __('Settings') }}
+                        </flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -136,10 +143,12 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
-        </flux:header>
+        @endauth
+    </flux:header>
 
-        {{ $slot }}
+    {{-- Page Content --}}
+    {{ $slot }}
 
-        @fluxScripts
-    </body>
+    @fluxScripts
+</body>
 </html>
