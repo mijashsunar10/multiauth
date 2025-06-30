@@ -48,3 +48,7 @@ The type must match the enum type
 Started for language
 
 php artisan lang:publish
+
+
+
+php artisan db:seed --class=AdminSeeder
